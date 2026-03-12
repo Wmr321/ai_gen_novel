@@ -1,5 +1,5 @@
 [project]
-name = "my_ai_gen_novel_2"
+name = "my_ai_gen_novel"
 version = "0.1.0"
 description = "小说生成系统"
 readme = "README.md"

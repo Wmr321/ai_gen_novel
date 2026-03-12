@@ -6,9 +6,8 @@
 使用流程：
 1. 用户输入主题
 2. 生成大纲 (Outline)
-3. 填充素材 (GetKnowledge)
-4. 存入数据库
-5. 启动写作Agent，逐章生成内容
+3. 存入数据库
+4. 启动写作Agent，逐章生成内容
 """
 import sys
 from dotenv import load_dotenv
@@ -165,7 +164,7 @@ def main():
                     chapters_count = len(o.get_chapters())
                     print(f"\n  ID: {o.id}")
                     print(f"  标题: {o.title}")
-                    print(f"  字数: {o.word_count:,}")
+                    print(f"  字数: {o.word_count}")
                     print(f"  章节数: {chapters_count}")
                     print(f"  状态: {o.status}")
                     print(f"  创建时间: {o.created_at}")
@@ -195,9 +194,8 @@ def main():
                         continue
 
                     # 获取所有章节
-                    from tools.chapter_writer import ChapterWriter
-                    writer = ChapterWriter()
-                    chapters = writer.get_chapters_by_outline(outline_id)
+                    from tools.chapter_writer import get_chapters_by_outline
+                    chapters = get_chapters_by_outline(outline_id)
 
                     if not chapters:
                         print("该大纲暂无章节内容")
