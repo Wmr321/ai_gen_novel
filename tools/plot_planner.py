@@ -30,7 +30,7 @@ def gen_plot(chapter_id: int,theme: str, purpose: str, material: str) -> Dict[st
     Returns:
         Dict: 结构化情节点
     """
-    print("情节设计")
+    print("开始情节设计")
     prompt = ChatPromptTemplate.from_messages([
         ("system", plot_prompt),
         ("human", "写作主题：{theme}、写作目的：{purpose}、写作素材：{material}")
@@ -39,15 +39,12 @@ def gen_plot(chapter_id: int,theme: str, purpose: str, material: str) -> Dict[st
     chain = prompt | my_llm
     try:
         plot_plan = chain.invoke({"theme":theme, "purpose": purpose, "material": material})
-        if plot_plan is None:
-            print("情节为空")
-        else:
-            print(plot_plan)
-        cid = plot_write(plot_plan.__dict__, chapter_id)
-        print(cid)
+        plot_write(plot_plan.__dict__, chapter_id)
+        print("情节设计完成")
         return plot_plan.__dict__
     except Exception as e:
         print(e)
+        return {"失败":e}
 
 def plot_write(plot_plan: dict[str,Any],chapter_id: int) -> int:
     """
@@ -56,7 +53,6 @@ def plot_write(plot_plan: dict[str,Any],chapter_id: int) -> int:
         plot_plan: 情节字典
         chapter_id: 章节id
     """
-    print("情节存储")
     db = SessionLocal()
     plot = ChapterPlot(
         chapter_id = chapter_id,
@@ -65,4 +61,5 @@ def plot_write(plot_plan: dict[str,Any],chapter_id: int) -> int:
     db.add(plot)
     db.commit()
     db.refresh(plot)
+    print("情节存储成功")
     return chapter_id
