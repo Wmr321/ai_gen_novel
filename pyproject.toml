@@ -1,0 +1,15 @@
+[project]
+name = "my_ai_gen_novel_2"
+version = "0.1.0"
+description = "小说生成系统"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "langchain>=0.1.0",
+    "langchain-community>=0.0.10",
+    "langchain-openai>=0.0.5",
+    "pydantic>=2.0.0",
+    "sqlalchemy>=2.0.0",
+    "python-dotenv>=1.0.0",
+    "openai>=1.0.0"
+]
