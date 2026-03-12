@@ -63,7 +63,7 @@ def create_outline_interactive():
         return None
 
 
-def save_outline_to_db(outline_data: dict) -> int:
+def save_outline_to_db(outline_data: dict) -> int | None:
     """将大纲保存到数据库"""
     print("\n【步骤3】保存大纲到数据库")
     print("-" * 50)

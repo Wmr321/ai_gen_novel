@@ -19,11 +19,12 @@ class PlotPlan(BaseModel):
     情节规划 : list[Dict[str, Any]] = Field(description="本章节的情节点")
 
 @tool(description = "将写作主题、写作目的、写作素材转化为具体情节点序列（3-5个关键事件）")
-def gen_plot(chapter_id: int,theme: str, purpose: str, material: str) -> Dict[str, Any]:
+def gen_plot(outline_id: int, chapter_number: int,theme: str, purpose: str, material: str) -> Dict[str, Any]:
     """
     生成情节规划
     Args:
-        chapter_id: 章节id
+        outline_id: 关联大纲id
+        chapter_number: 章节序号
         theme: 写作主题
         purpose: 写作目的
         material: 写作素材
@@ -39,27 +40,28 @@ def gen_plot(chapter_id: int,theme: str, purpose: str, material: str) -> Dict[st
     chain = prompt | my_llm
     try:
         plot_plan = chain.invoke({"theme":theme, "purpose": purpose, "material": material})
-        plot_write(plot_plan.__dict__, chapter_id)
+        plot_write(plot_plan.model_dump(), outline_id, chapter_number)
         print("情节设计完成")
-        return plot_plan.__dict__
+        return plot_plan.model_dump()
     except Exception as e:
         print(e)
         return {"失败":e}
 
-def plot_write(plot_plan: dict[str,Any],chapter_id: int) -> int:
+def plot_write(plot_plan: dict[str,Any], outline_id: int, chapter_number: int):
     """
     将情节保存到数据库
     Args:
         plot_plan: 情节字典
-        chapter_id: 章节id
+        outline_id: 关联大纲ID
+        chapter_number: 章节序号
     """
     db = SessionLocal()
     plot = ChapterPlot(
-        chapter_id = chapter_id,
+        outline_id = outline_id,
+        chapter_number = chapter_number,
         plots = json.dumps(plot_plan.get("情节规划",[]),ensure_ascii=False)
     )
     db.add(plot)
     db.commit()
     db.refresh(plot)
     print("情节存储成功")
-    return chapter_id

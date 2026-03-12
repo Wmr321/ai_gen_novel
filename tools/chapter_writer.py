@@ -90,3 +90,23 @@ def get_chapter(outline_id: int, chapter_number: int) -> Dict[str, Any] | None:
         return None
     finally:
         db.close()
+
+def get_chapters_by_outline(outline_id: int) -> list:
+    """
+    获取大纲下的所有章节
+
+    Args:
+        outline_id: 大纲ID
+
+    Returns:
+        list: 章节列表
+    """
+    db = SessionLocal()
+    try:
+        chapters = db.query(Chapter).filter(
+            Chapter.outline_id == outline_id
+        ).order_by(Chapter.chapter_number).all()
+
+        return [c.to_dict() for c in chapters]
+    finally:
+        db.close()

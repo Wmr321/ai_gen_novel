@@ -6,6 +6,8 @@
 import json
 from langchain.agents import create_agent
 from langgraph.checkpoint.memory import InMemorySaver
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.runnables import RunnableConfig
 
 
 from llm.llm_config import get_llm
@@ -80,10 +82,12 @@ class WritingAgent:
         print(f"# 共{nums}章")
         print(f"{'#'*20}\n")
 
-        config = {"configurable":{"thread_id":"1"}}
+        config = RunnableConfig(configurable={"thread_id":"1"})
         json_str = json.dumps(self.outline.to_dict(),ensure_ascii=False, indent=2)
+        user_prompt = ChatPromptTemplate.from_messages([("human","创作大纲为：{outline}")])
+        message = user_prompt.invoke({"outline": json_str})
         responses = writer.invoke(
-            {"messages":[{"role":"user","content":json_str}]},
+            message,
             config = config
         )
         messages = responses["messages"]
