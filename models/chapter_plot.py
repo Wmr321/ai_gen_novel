@@ -1,3 +1,7 @@
+# -*- coding: utf-8 -*-
+"""
+章节情节数据模型
+"""
 from sqlalchemy import Column, Integer, String, DateTime, Text, ForeignKey
 from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship
@@ -26,4 +30,5 @@ class ChapterPlot(Base):
             "status": self.status,
             "created_at": self.created_at.isoformat() if self.created_at else None,
             "updated_at": self.updated_at.isoformat() if self.updated_at else None
+
         }
