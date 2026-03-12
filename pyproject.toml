@@ -1,5 +1,5 @@
 [project]
-name = "my_ai_gen_novel"
+name = "ai_gen_novel"
 version = "0.1.0"
 description = "小说生成系统"
 readme = "README.md"
@@ -12,4 +12,5 @@ dependencies = [
     "sqlalchemy>=2.0.0",
     "python-dotenv>=1.0.0",
     "openai>=1.0.0"
+
 ]
